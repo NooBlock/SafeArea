@@ -87,7 +87,7 @@ struct gui
         STRING_CASE(F200, color2)
         STRING_CASE(SR300, color3)
         STRING_CASE(R200, color4)
-        STRING_CASE(FISHEYE, color5)
+//        STRING_CASE(FISHEYE, color5)
         STRING_CASE(COLOR, color6)
         if (!enabled) newC = { 0.5f, 0.5f, 0.5f };
 

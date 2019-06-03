@@ -52,7 +52,10 @@ else()
     include_directories(${GLFW_INCLUDE_DIR})
 endif()
 
-# Examples
+file(GLOB HEADERS hpp/*.hpp hpp/*.h)
+file(GLOB SOURCES cpp/*.cpp)
+add_library(zwysrc SHARED ${HEADERS} ${SOURCES})
+
 add_executable(zwy cpp/main.cpp)
 target_link_libraries(zwy ${DEPENDENCIES})
 
