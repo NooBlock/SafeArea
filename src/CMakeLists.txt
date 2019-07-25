@@ -56,7 +56,7 @@ file(GLOB HEADERS hpp/*.hpp hpp/*.h)
 file(GLOB SOURCES cpp/*.cpp)
 add_library(zwysrc SHARED ${HEADERS} ${SOURCES})
 
-add_executable(zwy cpp/main.cpp)
+add_executable(zwy cpp/capture.cpp)
 target_link_libraries(zwy ${DEPENDENCIES})
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)

@@ -1,4 +1,4 @@
-#include <librealsense/rs.hpp>
+/*#include <librealsense/rs.hpp>
 #include "../hpp/example.hpp"
 
 #include <cstdarg>
@@ -81,7 +81,7 @@ struct gui
         color color2 = { 1.0f, 0.6f, 1.0f };
         color color3 = { 1.0f, 1.0f, 0.6f };
         color color4 = { 1.0f, 0.6f, 0.6f };
-        color color5 = { 0.6f, 0.6f, 1.0f };
+        //color color5 = { 0.6f, 0.6f, 1.0f };
         color color6 = { 0.6f, 1.0f, 0.6f };
         STRING_CASE(ZR300, color1)
         STRING_CASE(F200, color2)
@@ -520,29 +520,29 @@ double find_option_value(const std::vector<option>& options, rs::option opt)
     return it->value;
 }
 
-void draw_autoexposure_roi_boundary(rs::stream s, const std::vector<option>& options, rs::device* dev, gui& g, int x, int y, double w, double h)
-{
-    if ((s == rs::stream::depth || s == rs::stream::infrared) &&
-        find_option_value(options, rs::option::r200_lr_auto_exposure_enabled) > 0)
-    {
-        auto intrinsics = dev->get_stream_intrinsics(s);
-        auto width = intrinsics.width;
-        auto height = intrinsics.height;
+//void draw_autoexposure_roi_boundary(rs::stream s, const std::vector<option>& options, rs::device* dev, gui& g, int x, int y, double w, double h)
+//{
+//    if ((s == rs::stream::depth || s == rs::stream::infrared) &&
+//        find_option_value(options, rs::option::r200_lr_auto_exposure_enabled) > 0)
+//    {
+//        auto intrinsics = dev->get_stream_intrinsics(s);
+//        auto width = intrinsics.width;
+//        auto height = intrinsics.height;
 
-        auto left =     find_option_value(options, rs::option::r200_auto_exposure_left_edge) / width;
-        auto right =    find_option_value(options, rs::option::r200_auto_exposure_right_edge) / width;
-        auto top =      find_option_value(options, rs::option::r200_auto_exposure_top_edge) / height;
-        auto bottom =   find_option_value(options, rs::option::r200_auto_exposure_bottom_edge) / height;
+//        auto left =     find_option_value(options, rs::option::r200_auto_exposure_left_edge) / width;
+//        auto right =    find_option_value(options, rs::option::r200_auto_exposure_right_edge) / width;
+//        auto top =      find_option_value(options, rs::option::r200_auto_exposure_top_edge) / height;
+//        auto bottom =   find_option_value(options, rs::option::r200_auto_exposure_bottom_edge) / height;
 
-        left = x + left * w;
-        right = x + right * w;
-        top = y + top * h;
-        bottom = y + bottom * h;
+//        left = x + left * w;
+//        right = x + right * w;
+//        top = y + top * h;
+//        bottom = y + bottom * h;
 
-        g.outline_rect({ (int)left + 1, (int)top + 1, (int)right - 1, (int)bottom - 1 }, { 1.0f, 1.0f, 1.0f });
-        g.label({ (int)left + 4, (int)bottom - 6 }, { 1.0f, 1.0f, 1.0f }, "AE ROI");
-    }
-}
+//        g.outline_rect({ (int)left + 1, (int)top + 1, (int)right - 1, (int)bottom - 1 }, { 1.0f, 1.0f, 1.0f });
+//        g.label({ (int)left + 4, (int)bottom - 6 }, { 1.0f, 1.0f, 1.0f }, "AE ROI");
+//    }
+//}
 
 int main(int argc, char * argv[])
 {
@@ -839,10 +839,10 @@ int main(int argc, char * argv[])
                         else if (!gui_click_flag)
                             buffers[i].show((rs::stream)i, format[i], fps[i], frame_number[i], frame_timestamp[i], pos_vec[i].rx, pos_vec[i].ry, pos_vec[i].rw, pos_vec[i].rh, resolutions[(rs::stream)i].width, resolutions[(rs::stream)i].height);
 
-                        if (frame_clicked[i])
-                            draw_autoexposure_roi_boundary((rs::stream)i, options, dev, g, center_position.rx, center_position.ry, center_position.rw, center_position.rh);
-                        else if (!gui_click_flag)
-                            draw_autoexposure_roi_boundary((rs::stream)i, options, dev, g, pos_vec[i].rx, pos_vec[i].ry, fWidth, fHeight);
+//                        if (frame_clicked[i])
+//                            draw_autoexposure_roi_boundary((rs::stream)i, options, dev, g, center_position.rx, center_position.ry, center_position.rw, center_position.rh);
+//                        else if (!gui_click_flag)
+//                            draw_autoexposure_roi_boundary((rs::stream)i, options, dev, g, pos_vec[i].rx, pos_vec[i].ry, fWidth, fHeight);
                     }
 
                     if (has_motion_module && motion_tracking_enable)
@@ -935,3 +935,5 @@ int main(int argc, char * argv[])
         }
     }
 }
+
+*/
