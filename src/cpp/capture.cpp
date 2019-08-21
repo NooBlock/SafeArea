@@ -23,36 +23,46 @@ bool initialize_streaming( )
            dev.enable_stream( rs::stream::depth, TILE_W, TILE_H, rs::format::z16, FRAMERATE );
            dev.set_option(rs::option::color_enable_auto_exposure, 1);
            dev.set_option(rs::option::color_enable_auto_white_balance, 1);
+           vector<rs::stream> supported_streams;
+//           // Compute field of view for each enabled stream
+//           for (auto & stream : supported_streams)
+//           {
+//               if (!dev.is_stream_enabled(stream)) continue;
+//               auto intrin = dev.get_stream_intrinsics(stream);
+//               cout << "Capturing " << stream << " at " << intrin.width << " x " << intrin.height;
+//               cout << setprecision(1) << fixed << ", fov = " << intrin.hfov() << " x " << intrin.vfov() << ", distortion = " << intrin.model() << endl;
+//           }
            dev.start( );
            success = true;
 }
-
-       vector<rs::stream> supported_streams;
-       // Compute field of view for each enabled stream
-       for (auto & stream : supported_streams)
-       {
-           if (!dev.is_stream_enabled(stream)) continue;
-           auto intrin = dev.get_stream_intrinsics(stream);
-           cout << "Capturing " << stream << " at " << intrin.width << " x " << intrin.height;
-           cout << setprecision(1) << fixed << ", fov = " << intrin.hfov() << " x " << intrin.vfov() << ", distortion = " << intrin.model() << endl;
-       }
        return success;
 }
 
 bool display_next_frame( )
 {
-       // Create depth image
-       Mat depth16( TILE_H, TILE_W, CV_16U,   (uchar *)dev.get_frame_data( rs::stream::depth ) );
+//       // Create depth image
+//       Mat depth16( TILE_H, TILE_W, CV_16U,   (uchar *)dev.get_frame_data( rs::stream::depth ) );
 
-       // Create color image
+//       // Create color image
        Mat rgb( TILE_H, TILE_W, CV_8UC3,  (uchar *)dev.get_frame_data( rs::stream::color ) );
 
-       // < 800
-       Mat depth8u = depth16;
-       depth8u.convertTo( depth8u, CV_8UC1, 255.0/1000 );
-       imshow( WINDOW_DEPTH, depth8u );
+//       // < 800
+//       Mat depth8u = depth16;
+//       depth8u.convertTo( depth8u, CV_8UC1, 1.0);
+//       cout<<dev.get_depth_scale()<<endl;
+//       imshow( WINDOW_DEPTH, depth8u );
        cvtColor( rgb, rgb, cv::COLOR_BGR2RGB );
        imshow( WINDOW_RGB, rgb );
+    Mat img( TILE_H, TILE_W, CV_8UC1);
+    const uint16_t *ptr = (const uint16_t*) (dev.get_frame_data(rs::stream::depth));
+    for (int i = 0; i < img.size().area(); i++) {
+        const double depth = 1.0 * ptr[i];
+        img.data[i] = (unsigned char)((1.0 - (depth - 550) / (2500 - 550)) * 255);
+    }
+
+    cv::imshow("realsense", img);
+
+
        int k = 0;
        if((k = waitKey(1)) == 27)
            return false;
@@ -74,7 +84,6 @@ int main() try
           return EXIT_FAILURE;
     }
 
-    // Loop until someone left clicks on either of the images in either window.
     while( _loop )
     {
           if( dev.is_streaming( ) )
