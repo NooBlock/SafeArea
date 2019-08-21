@@ -22,7 +22,9 @@ else()
 endif()
 
 find_package(OpenGL REQUIRED)
-set(DEPENDENCIES realsense ${OPENGL_LIBRARIES})
+find_package(OpenCV REQUIRED)
+set(DEPENDENCIES realsense ${OPENGL_LIBRARIES} ${OpenCV_INCLUDE_DIRS})
+
 
 if(WIN32)
     add_subdirectory(third_party/glfw)
@@ -48,7 +50,7 @@ else()
                   /usr/local/lib/${CMAKE_LIBRARY_ARCHITECTURE}
                   /usr/X11R6/lib
     )
-    list(APPEND DEPENDENCIES m ${GLFW_LIBRARIES} ${LIBUSB1_LIBRARIES})
+    list(APPEND DEPENDENCIES m ${GLFW_LIBRARIES} ${LIBUSB1_LIBRARIES} ${OpenCV_LIBS})
     include_directories(${GLFW_INCLUDE_DIR})
 endif()
 
