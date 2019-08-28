@@ -25,7 +25,6 @@ find_package(OpenGL REQUIRED)
 find_package(OpenCV REQUIRED)
 set(DEPENDENCIES realsense ${OPENGL_LIBRARIES} ${OpenCV_INCLUDE_DIRS})
 
-
 if(WIN32)
     add_subdirectory(third_party/glfw)
     list(APPEND DEPENDENCIES glfw3)

@@ -2,6 +2,7 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 #include<vector>
+#include<omp.h>
 using namespace std;
 using namespace cv;
 
@@ -38,6 +39,50 @@ bool initialize_streaming( )
        return success;
 }
 
+void change_color(const Mat& depth){
+      Mat depthcolor( TILE_H, TILE_W, CV_8UC3);
+      for (int i = 0; i < TILE_H; i++) {
+#pragma omp parallel for num_threads(4)
+          for(int j = 0;j<TILE_W;j++){
+              int p = (int)depth.at<uchar>(i,j);
+          if (0<p && p< 32){
+              depthcolor.at<Vec3b>(i,j) [0] = 0;
+              depthcolor.at<Vec3b>(i,j) [1] = 255;
+              depthcolor.at<Vec3b>(i,j) [2] = 255;
+          }else if(33<p && p < 64){
+              depthcolor.at<Vec3b>(i,j) [0] = 0;
+              depthcolor.at<Vec3b>(i,j) [1] = 25;
+              depthcolor.at<Vec3b>(i,j) [2] = 25;
+          }else if(65<p && p< 96){
+              depthcolor.at<Vec3b>(i,j) [0] = 0;
+              depthcolor.at<Vec3b>(i,j) [1] = 55;
+              depthcolor.at<Vec3b>(i,j) [2] = 255;
+          }else if(97<p && p < 128){
+              depthcolor.at<Vec3b>(i,j) [0] = 0;
+              depthcolor.at<Vec3b>(i,j) [1] = 0;
+              depthcolor.at<Vec3b>(i,j) [2] = 255;
+          }else if(129<p && p < 160){
+              depthcolor.at<Vec3b>(i,j) [0] = 255;
+              depthcolor.at<Vec3b>(i,j) [1] = 0;
+              depthcolor.at<Vec3b>(i,j) [2] = 255;
+         }else if(161<p && p < 192){
+              depthcolor.at<Vec3b>(i,j) [0] = 0;
+              depthcolor.at<Vec3b>(i,j) [1] = 255;
+              depthcolor.at<Vec3b>(i,j) [2] = 0;
+         }else if(193<p && p < 224){
+              depthcolor.at<Vec3b>(i,j) [0] = 100;
+              depthcolor.at<Vec3b>(i,j) [1] = 255;
+              depthcolor.at<Vec3b>(i,j) [2] = 0;
+         }else{
+              depthcolor.at<Vec3b>(i,j) [0] = 10;
+              depthcolor.at<Vec3b>(i,j) [1] = 0;
+              depthcolor.at<Vec3b>(i,j) [2] = 255;
+         }
+     }
+      cv::imshow("depthcolor", depthcolor);
+    }
+}
+
 bool display_next_frame( )
 {
 //       // Create depth image
@@ -51,17 +96,17 @@ bool display_next_frame( )
 //       depth8u.convertTo( depth8u, CV_8UC1, 1.0);
 //       cout<<dev.get_depth_scale()<<endl;
 //       imshow( WINDOW_DEPTH, depth8u );
-       cvtColor( rgb, rgb, cv::COLOR_BGR2RGB );
-       imshow( WINDOW_RGB, rgb );
+     cvtColor( rgb, rgb, cv::COLOR_BGR2RGB );
+     imshow( WINDOW_RGB, rgb );
     Mat img( TILE_H, TILE_W, CV_8UC1);
     const uint16_t *ptr = (const uint16_t*) (dev.get_frame_data(rs::stream::depth));
     for (int i = 0; i < img.size().area(); i++) {
         const double depth = 1.0 * ptr[i];
         img.data[i] = (unsigned char)((1.0 - (depth - 550) / (2500 - 550)) * 255);
+//        cout<<img.data[i]<<endl;
     }
-
-    cv::imshow("realsense", img);
-
+    cv::imshow(WINDOW_DEPTH, img);
+//    change_color(img);
 
        int k = 0;
        if((k = waitKey(1)) == 27)
@@ -69,6 +114,7 @@ bool display_next_frame( )
        else
            return true;
 }
+
 int main() try
 {
 //    Mat colorImage  = Mat::zeros(Size(TILE_H, TILE_W), CV_8UC3);
@@ -107,4 +153,3 @@ catch (const exception & e)
     cerr << e.what() << endl;
     return EXIT_FAILURE;
 }
-
