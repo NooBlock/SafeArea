@@ -26,24 +26,25 @@ static void on_cursor_pos(GLFWwindow * win, double x, double y)
     lastX = x;
     lastY = y;
 }
+/*
+ GLFWwindow * point_cloud_init(){
+        // Open a GLFW window to display our output
+        glfwInit();
+        GLFWwindow * win = glfwCreateWindow(640, 480, "pointcloud", nullptr, nullptr);
+        glfwSetCursorPosCallback(win, on_cursor_pos);
+        glfwSetMouseButtonCallback(win, on_mouse_button);
+        glfwSetKeyCallback(win, key_callback);
+        glfwMakeContextCurrent(win);
+        glfwPollEvents();
+        return win;
+}*/
 
-// GLFWwindow * point_cloud_init(){
-//        // Open a GLFW window to display our output
-//        glfwInit();
-//        GLFWwindow * win = glfwCreateWindow(640, 480, "pointcloud", nullptr, nullptr);
-//        glfwSetCursorPosCallback(win, on_cursor_pos);
-//        glfwSetMouseButtonCallback(win, on_mouse_button);
-//        glfwSetKeyCallback(win, key_callback);
-//        glfwMakeContextCurrent(win);
-//        glfwPollEvents();
-//        return win;
-//}
 int point_cloud(rs::device& dev)
 {
 
     // Open a GLFW window to display our output
     glfwInit();
-    GLFWwindow * win = glfwCreateWindow(640, 480, "pointcloud", nullptr, nullptr);
+    GLFWwindow * win = glfwCreateWindow(1280, 960, "pointcloud", nullptr, nullptr);
     glfwSetCursorPosCallback(win, on_cursor_pos);
     glfwSetMouseButtonCallback(win, on_mouse_button);
     glfwSetKeyCallback(win, key_callback);
@@ -68,7 +69,7 @@ int point_cloud(rs::device& dev)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(60, (float)640/480, 0.01f, 20.0f);
+        gluPerspective(60, (float)1280/960, 0.01f, 20.0f);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         gluLookAt(0,0,0, 0,0,1, 0,-1,0);
